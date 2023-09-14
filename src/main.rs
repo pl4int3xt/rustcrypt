@@ -1,7 +1,5 @@
 extern crate clap;
-use chacha20poly1305::aead::OsRng;
 use clap::Parser;
-use rand::RngCore;
 
 mod handlers;
 mod utils;
@@ -9,14 +7,25 @@ mod utils;
 fn main() {
     utils::utils::banner();
     let args = utils::utils::Args::parse();
+    let mut key: String = String::from("");
+    let mut nonce: String = String::from("");
 
-    let mut key = [0u8; 32];
-    let mut nonce = [0u8; 24];
-    OsRng.fill_bytes(&mut key);
-    OsRng.fill_bytes(&mut nonce);
+    match &args.key {
+        Some(value) => { key.push_str(&format!("{}", value)); },
+        None => {"";}
+    }
 
-    println!("{:?} ==============", key);
-    println!("{:?} ==============", nonce);
-    println!("{:?}",
-        handlers::handlers::encrypt_small_file(&args.input, &args.output, &key, &nonce).unwrap());
+    match &args.nonce {
+        Some(value) => { nonce.push_str(&format!("{}", value)); },
+        None => {"";}
+    }
+
+
+    handlers::handlers::run(
+        &args.mode, 
+        &args.size,
+        &args.input,
+        &args.output,
+        &key,
+        &nonce);
 }
