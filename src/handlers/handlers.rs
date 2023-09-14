@@ -34,8 +34,6 @@ pub fn run(mode: &str, size: &str,filepath: &str, dist: &str, input_key: &str, i
     OsRng.fill_bytes(&mut key);
     OsRng.fill_bytes(&mut nonce);
 
-    mode_check(mode, &key, &nonce);
-
     let dec_key: [u8; 32]= {
         if input_key != ""{
             let mut array = [0; 32];
@@ -59,7 +57,15 @@ pub fn run(mode: &str, size: &str,filepath: &str, dist: &str, input_key: &str, i
     match mode {
         "encrypt" => match size {
             "small" => {
-                encrypt_small_file(filepath, dist, &key, &nonce).unwrap();
+                match encrypt_small_file(filepath, dist, &key, &nonce) {
+                    Err(error) => { 
+                        println!("Error occurred : {}", error);
+                        std::process::exit(1);
+                    }
+                    _ => {}
+                }
+                
+                mode_check(mode, &key, &nonce);
             },
             "large" => {
                 encrypt_large_file(filepath, dist, &key, &nonce).unwrap();
@@ -68,7 +74,13 @@ pub fn run(mode: &str, size: &str,filepath: &str, dist: &str, input_key: &str, i
         },
         "decrypt" => match size {
             "small" => {
-                decrypt_small_file(filepath, dist, &dec_key, &dec_nonce).unwrap();
+                match decrypt_small_file(filepath, dist, &dec_key, &dec_nonce) {
+                    Err(error) => { 
+                        println!("Error occurred : {}", error);
+                        std::process::exit(1);
+                    }
+                    _ => {}
+                }
             },
             "large" => {
                 decrypt_large_file(filepath, dist, &dec_key, &dec_nonce).unwrap();
