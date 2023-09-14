@@ -9,7 +9,13 @@ pub fn banner(){
 }
 
 #[derive(Parser, Debug)]
-#[command(author, version, about, long_about = None)]
+#[command(name = "Rustcrypt")]
+#[command(author = "Myst3ry")]
+#[command(version = "1.0.0")]
+#[command(about, long_about = None)]
+#[command(
+    help_template = " {author-with-newline} {about-section}Version: {version} \n {usage-heading} {usage} \n {all-args} {tab}"
+)]
 pub struct Args{
     /// Input file path
     #[arg(short, long)]
