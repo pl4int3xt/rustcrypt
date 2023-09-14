@@ -1,7 +1,7 @@
 # Rustcrypt
 RustCrypt: Because even your files need a good, old-fashioned cloak-and-dagger routine! This Rust tool encrypts and decrypts files like a secret agent with a taste for code-breaking. Your data's new motto? 'Shhh, I'm encrypted!'" 🔒🕵️‍♂️
-# Usage
-The tool can be used the same way for both encrpting and decrypting of both small and large files
+# Algorithm used
+I used XChaCha20-Poly1305 since it uses streaming AEAD encryption to guarantee that the entire data stream has not been modified, corrupted or reordered. It is also simple and fast
 # Arguments
 
 ```bash
